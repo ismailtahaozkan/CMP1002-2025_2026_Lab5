@@ -1,0 +1,86 @@
+QUICK REVISION SHEET: Strings, Function Overloading & Operator Overloading
+============================================================================
+
+CORE IDEA
+---------
+You will build a custom string class (MyString) that wraps std::string.
+You will practice TWO key C++ features:
+  - Function Overloading: same function name, different parameter types
+  - Operator Overloading: making +, ==, [], etc. work with your class
+
+
+WHY IT MATTERS
+--------------
+Real-world C++ libraries rely heavily on overloading. Think about how
+std::string already lets you do: str1 + str2, str[0], cout << str.
+Someone had to write those overloaded operators! Today, that's you.
+
+
+FUNCTION OVERLOADING - KEY RULES
+---------------------------------
+- Same function name, DIFFERENT parameter list
+- Return type alone does NOT distinguish overloads
+- Compiler picks the right version based on arguments
+
+  MyString append(const MyString& other);  // append another MyString
+  MyString append(const char* cstr);       // append a C-string
+  MyString append(char ch);                // append a single char
+  MyString append(int number);             // append a number as text
+
+
+OPERATOR OVERLOADING - KEY RULES
+---------------------------------
+- Define special meaning for operators on your class
+- Syntax: ReturnType operator@(parameters)
+- Can be member function or friend function
+
+  // Member: a + b  ->  a.operator+(b)
+  MyString operator+(const MyString& other) const;
+
+  // Friend: cout << s  ->  operator<<(cout, s)
+  friend ostream& operator<<(ostream& os, const MyString& s);
+
+Common operators to overload:
+  +   concatenation
+  ==  equality check
+  !=  inequality
+  <   less-than (lexicographic)
+  >   greater-than
+  []  indexing (access single char)
+  *   repetition ("Ha" * 3 = "HaHaHa")
+  <<  stream output
+  >>  stream input
+
+
+STRING OPERATIONS - QUICK REFERENCE
+-------------------------------------
+  length()          -> number of characters
+  charAt(i)         -> character at index i (throw if invalid)
+  substring(s, len) -> extract part of string
+  toUpperCase()     -> "hello" -> "HELLO"
+  toLowerCase()     -> "HELLO" -> "hello"
+  trim()            -> "  hi  " -> "hi"
+  reverse()         -> "abc" -> "cba"
+  find(target)      -> index of first match, or -1
+  count(ch)         -> how many times ch appears
+
+
+EDGE CASES TO REMEMBER
+-----------------------
+- Empty strings: length=0, trim returns "", reverse returns ""
+- Invalid index: charAt(-1) should throw out_of_range
+- operator* with 0 or negative: return empty string
+- replace when pattern not found: return original unchanged
+
+
+SMALL CODE SNIPPET
+-------------------
+  MyString s("Hello");
+  MyString w(" World");
+
+  cout << s + w;            // "Hello World"   (operator+)
+  cout << s.append('!');    // "Hello!"        (function overloading)
+  cout << s.append(42);     // "Hello42"       (function overloading)
+  cout << (s == s);         // 1 (true)        (operator==)
+  cout << s[0];             // 'H'             (operator[])
+  cout << s * 2;            // "HelloHello"    (operator*)
